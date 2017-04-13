@@ -85,6 +85,8 @@ public abstract class SpaceShips {
 		}
 		if(shieldToggled()){
 			g.drawImage(shield,(int)(getX()-width*.5), (int)(getY()-height*.5),width*2,height*2, null);
+			g.setColor(new Color(66, 134, 244));
+			g.fillRect(getX(),getY()+height+10,getShieldHealth()*5, 7);
 		}
 	}
 	public int getX(){

@@ -5,7 +5,7 @@ public class StageTwoBoss extends SpaceShips{
 	public StageTwoBoss(int x, int y) {
 		super("/Images/Stage2Boss.png", x, y, 800, 500, 2000);
 		onBoard = new Timer(100, e->{
-			if(getY()<-320){
+			if(getY()<-220){
 				changeYVelocity(1);
 			}else
 				changeYVelocity(0);

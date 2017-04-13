@@ -42,11 +42,11 @@ public class SpaceShooter extends JPanel implements Runnable {
 	}
 	
 	public void runStage(int stage){	
-		switch(stage){
-		case 0:
 		int xBuffer =WIDTH-100; // 100 pixel buffer
 		int yBuffer = 0;
 		final int SPACER = 5;
+		switch(stage){
+		case 0:
 		for(int row = 0; row < 6; row++){
 			enemys.add(new WheelShip(xBuffer,yBuffer));
 			xBuffer-=(100-SPACER);
@@ -84,7 +84,21 @@ public class SpaceShooter extends JPanel implements Runnable {
 		enemys.add(new StageOneBoss(xBuffer, yBuffer));
 		break;
 		case 1:
-			enemys.add(new StageTwoBoss(-100,-230));
+			yBuffer = 0;
+			xBuffer = WIDTH; 
+			for(int row = 0; row < 6; row++){
+				for(int col = 0; col < 6; col++){
+					if(col%2==0)
+					enemys.add(new MetalShip(xBuffer,yBuffer));
+					xBuffer+=(100-SPACER);
+				}
+				yBuffer-=(100+SPACER);
+				xBuffer = 0;
+			}
+			
+			xBuffer = -100;
+			yBuffer -= 330;
+			enemys.add(new StageTwoBoss(xBuffer,yBuffer));
 			break;
 		}	
 	}
@@ -413,8 +427,12 @@ public class SpaceShooter extends JPanel implements Runnable {
 		for(int index = 0; index < enemys.size(); index++){
 			for(int index2 = 0; index2 < enemys.get(index).getBulletArray().size(); index2++){
 				Projectiles p = enemys.get(index).getBulletArray().get(index2);
+				try{
 				p.changeY(p.getYVelocity());
 				p.changeX(p.getXVelocity());
+				}catch(Exception e){
+					
+				}
 			}
 		}
 	}
