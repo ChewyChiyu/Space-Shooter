@@ -21,6 +21,7 @@ import javax.swing.Timer;
 public class SpaceShooter extends JPanel implements Runnable {
 	Fighter player = new Fighter(250,550);
 	ArrayList<SpaceShips> enemys = new ArrayList<SpaceShips>();
+	ArrayList<Utilitys> drops = new ArrayList<Utilitys>();
 	BufferedImage backDrop;
 	boolean isRunning;
 	boolean fatalWound = false;
@@ -233,6 +234,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 	public void updatePanel(){
 		updateShipLocations();
 		updateBulletLocations();
+		updateUpgradeLocations();
 		checkForHit();
 		checkOutOfBounds();
 		checkForDead();
@@ -245,6 +247,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 			if (reply == JOptionPane.YES_OPTION) {
 				player = new Fighter(250,550);
 				enemys.clear();
+				drops.clear();
 				score = 0;
 				addEnemysS1();
 				fatalWound = false;
@@ -261,6 +264,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 			if (reply == JOptionPane.YES_OPTION) {
 				player = new Fighter(250,550);
 				enemys.clear();
+				drops.clear();
 				score = 0;
 				addEnemysS1();
 				fatalWound = false;
@@ -272,6 +276,23 @@ public class SpaceShooter extends JPanel implements Runnable {
 		}
 	}
 	public void checkForHit(){
+		for(int index = 0; index < drops.size(); index++){
+				int playerX1 = player.getX();
+				int playerX2 = player.getX() + player.getWidth();
+				int playerY1 = player.getY();
+				int playerY2 = player.getY() + player.getHeight();
+				
+				Utilitys u = drops.get(index);
+				if(u.getX()>playerX1&&u.getX()<playerX2&&u.getY()>playerY1&&u.getY()<playerY2){
+					drops.remove(u);
+					if(u.getType().equals(UtilityType.REPAIR)){
+						player.heal();
+					}
+					if(u.getType().equals(UtilityType.UPGRADE)){
+						player.upgrade();
+					}
+				}
+		}
 		for(int index = 0; index < enemys.size(); index++){
 			for(int index2 = 0; index2 < enemys.get(index).getBulletArray().size(); index2++){
 				int playerX1 = player.getX();
@@ -302,6 +323,10 @@ public class SpaceShooter extends JPanel implements Runnable {
 					if(enemy.fatalHit(p.getPower())){
 						enemys.remove(enemy);
 						score+=100;
+						if((int)(Math.random()*3)==1){ //1 in 4 change for a utility spawn
+							UtilityType u = ((int)(Math.random()*2)==1)?UtilityType.REPAIR:UtilityType.UPGRADE;
+							drops.add(new Utilitys(u,enemy.getX(),enemy.getY()));
+						}
 					}
 					
 				}
@@ -309,6 +334,13 @@ public class SpaceShooter extends JPanel implements Runnable {
 		}
 	}
 	public void checkOutOfBounds(){
+		for(int index = 0; index < drops.size(); index++){
+			Utilitys u = drops.get(index);
+			if(u.getY()>HEIGHT){
+				drops.remove(u);
+			}
+			
+	}
 		for(int index = 0; index < player.getBulletArray().size(); index++){
 			Projectiles p = player.getBulletArray().get(index);
 			if(p.getX()<0||p.getX()>WIDTH||p.getY()<0||p.getY()>HEIGHT){
@@ -328,6 +360,13 @@ public class SpaceShooter extends JPanel implements Runnable {
 			if(s.getY()>HEIGHT){
 				enemys.remove(s);
 			}
+		}
+	}
+	public void updateUpgradeLocations(){
+		for(int index = 0; index < drops.size(); index++){
+			Utilitys u = drops.get(index);
+			u.changeX(u.getXVelocity());
+			u.changeY(u.getYVelocity());
 		}
 	}
 	public void updateBulletLocations(){
@@ -373,8 +412,15 @@ public class SpaceShooter extends JPanel implements Runnable {
 		drawBackDrop(g);
 		drawShips(g);
 		drawBullets(g);
+		drawUpgrades(g);
 		drawString(g);
 
+	}
+	public void drawUpgrades(Graphics g){
+		for(int index = 0; index < drops.size(); index++){
+			Utilitys u = drops.get(index);
+			u.draw(g, u.getX(), u.getY());
+		}
 	}
 	public void drawString(Graphics g){
 		g.setColor(Color.WHITE);

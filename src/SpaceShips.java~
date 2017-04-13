@@ -9,12 +9,10 @@ import javax.imageio.ImageIO;
 
 public abstract class SpaceShips {
 	private BufferedImage ship; 
-	private int upgradeStage = 1;
 	private final String imagePath;
 	private int x;
 	private int y;
 	private int health; 
-	private final int initialHealth;
 	private int width;
 	private int height;
 	private int xVelocity;
@@ -28,7 +26,6 @@ public abstract class SpaceShips {
 		this.width = width;
 		this.height = height;
 		this.health = health;
-		initialHealth = health;
 		loadImage();
 	}
 	public void loadImage(){
@@ -45,16 +42,7 @@ public abstract class SpaceShips {
 	public void draw(Graphics g, int x, int y){
 		g.drawImage(ship, x, y, width,height, null);
 		g.setColor(Color.green);
-		int totalHealth = health;
-		int xBuffer = x;
-		int yBuffer = y+height;
-		while(totalHealth-->=0){
-		g.fillRect(xBuffer++, yBuffer, 10, 6);		
-		if(Math.abs(xBuffer-x)>width){ //100 pixel buffer
-			xBuffer = x;
-			yBuffer+= 10;
-		}
-		}
+		g.fillRect(x, y+height, health*10, 5);	//Health buffer added	
 	}
 	public int getX(){
 		return x;
@@ -94,14 +82,5 @@ public abstract class SpaceShips {
 			return true;
 		}
 		return false;
-	}
-	public void heal(){
-		health = initialHealth;
-	}
-	public void upgrade(){
-		upgradeStage++;
-	}
-	public int getUpgradeStage(){
-		return upgradeStage;
 	}
 }
