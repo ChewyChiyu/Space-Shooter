@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 public abstract class SpaceShips {
 	private BufferedImage ship; 
 	public static BufferedImage[] bullets = new BufferedImage[2];
+	public static BufferedImage shield;
 	private int upgradeStage = 1;
 	private final String imagePath;
 	private int x;
@@ -20,6 +21,9 @@ public abstract class SpaceShips {
 	private int height;
 	private int xVelocity;
 	private int yVelocity;
+	private boolean shieldActive = false;
+	private int shieldHealth = 0;
+	private int ds = 20;
 	public ArrayList<Projectiles> bulletsFired = new ArrayList<Projectiles>();
 
 	public SpaceShips(String imagePath, int x , int y, int width, int height, int health){
@@ -44,6 +48,12 @@ public abstract class SpaceShips {
 		URL imageUrl2 = getClass().getResource("/Images/Bullet2.png");
 		try {
 			bullets[1] = ImageIO.read(imageUrl2);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		URL imageUrl3 = getClass().getResource("/Images/Shield.png");
+		try {
+			shield = ImageIO.read(imageUrl3);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -72,6 +82,9 @@ public abstract class SpaceShips {
 			xBuffer = x;
 			yBuffer+= 10;
 		}
+		}
+		if(shieldToggled()){
+			g.drawImage(shield,(int)(getX()-width*.5), (int)(getY()-height*.5),width*2,height*2, null);
 		}
 	}
 	public int getX(){
@@ -121,5 +134,27 @@ public abstract class SpaceShips {
 	}
 	public int getUpgradeStage(){
 		return upgradeStage;
+	}
+	public void toggleShield(){
+		shieldActive = true;
+	}
+	public boolean shieldToggled(){
+		return shieldActive;
+	}
+	public int getShieldHealth(){
+		return shieldHealth;
+	}
+	public boolean blockedAttack(){
+		if(shieldHealth-->=0){
+			return true;
+		}
+		shieldActive = false;
+		return false;
+	}
+	public void setShieldHealth(int inc){
+		shieldHealth = inc;
+	}
+	public int getDefaultSheild(){
+		return ds;
 	}
 }

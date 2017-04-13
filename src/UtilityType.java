@@ -1,4 +1,4 @@
 
 public enum UtilityType {
-	UPGRADE, REPAIR;
+	UPGRADE, REPAIR, SHIELD;
 }

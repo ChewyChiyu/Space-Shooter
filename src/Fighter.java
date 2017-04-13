@@ -9,7 +9,7 @@ public class Fighter extends SpaceShips {
 
 	public void fire(){
 		if(getUpgradeStage()<5){
-			int xBuffer = 0;
+			int xBuffer = 30;
 			for(int index = 0; index < getUpgradeStage(); index++){
 				bulletsFired.add(new Projectiles(getX()+xBuffer, getY(), -5,0, bullets[0],5)); // + 50 for center 100+ for height
 				xBuffer+=30;
@@ -20,8 +20,8 @@ public class Fighter extends SpaceShips {
 				bulletsFired.add(new Projectiles(getX()+xBuffer, getY(), -5,0, bullets[0],5)); // + 50 for center 100+ for height
 				xBuffer+=30;
 			}
-		}
-
+		}		
+				
 	}
 
 }

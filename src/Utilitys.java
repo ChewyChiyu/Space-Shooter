@@ -5,7 +5,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-public class Utilitys {
+public class Utilitys{
 	private UtilityType u;
 	private BufferedImage sprite;
 	private int x;
@@ -35,13 +35,21 @@ public class Utilitys {
 					e.printStackTrace();
 				}
 			}
+			if(u.equals(UtilityType.SHIELD)){
+				URL imageUrl = getClass().getResource("/Images/Shield.png");
+				try {
+					sprite = ImageIO.read(imageUrl);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	
 	public UtilityType getType(){
 		return u;
 	}
 	public void draw(Graphics g, int x, int y){
-		g.drawImage(sprite, x, y, 60,60,null); //all upgrades / repair kits are 60 x 60
+     g.drawImage(sprite, x, y, 60,60,null); //repair kits are 60 x 60
 	}
 	public void changeX(int inc){
 		x += inc;

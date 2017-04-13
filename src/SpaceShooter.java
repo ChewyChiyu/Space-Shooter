@@ -255,7 +255,6 @@ public class SpaceShooter extends JPanel implements Runnable {
 		if(enemys.size()<=0){
 			int reply = JOptionPane.showConfirmDialog(null, "You WON! Score : " + score + "\n Play Again?" , "Win", JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
-				System.gc();
 				player = new Fighter(250,550);
 				enemys.clear();
 				drops.clear();
@@ -273,7 +272,6 @@ public class SpaceShooter extends JPanel implements Runnable {
 		if(fatalWound){
 			int reply = JOptionPane.showConfirmDialog(null, "You Died!" + "\n Play Again?" , "Lose", JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
-				System.gc();
 				player = new Fighter(250,550);
 				enemys.clear();
 				drops.clear();
@@ -293,7 +291,6 @@ public class SpaceShooter extends JPanel implements Runnable {
 			int playerX2 = player.getX() + player.getWidth();
 			int playerY1 = player.getY();
 			int playerY2 = player.getY() + player.getHeight();
-
 			Utilitys u = drops.get(index);
 			if(u.getX()>playerX1&&u.getX()<playerX2&&u.getY()>playerY1&&u.getY()<playerY2){
 				drops.remove(u);
@@ -302,6 +299,10 @@ public class SpaceShooter extends JPanel implements Runnable {
 				}
 				if(u.getType().equals(UtilityType.UPGRADE)){
 					player.upgrade();
+				}
+				if(u.getType().equals(UtilityType.SHIELD)){
+					player.toggleShield();
+					player.setShieldHealth(player.getDefaultSheild());
 				}
 			}
 		}
@@ -315,6 +316,9 @@ public class SpaceShooter extends JPanel implements Runnable {
 				Projectiles p = enemys.get(index).getBulletArray().get(index2);
 				if(p.getX()>playerX1&&p.getX()<playerX2&&p.getY()>playerY1&&p.getY()<playerY2){
 					enemys.get(index).getBulletArray().remove(p);
+					if(player.blockedAttack()){
+						continue;
+					}
 					if(player.fatalHit(p.getPower())){
 						fatalWound = true;
 					}
@@ -335,8 +339,14 @@ public class SpaceShooter extends JPanel implements Runnable {
 					if(enemy.fatalHit(p.getPower())){
 						enemys.remove(enemy);
 						score+=100;
-						if((int)(Math.random()*3)==1){ //1 in 4 change for a utility spawn
-							UtilityType u = ((int)(Math.random()*2)==1)?UtilityType.REPAIR:UtilityType.UPGRADE;
+						UtilityType u = null;
+						if((int)(Math.random()*4)==1){ //1 in 4 change for a utility spawn
+							switch((int)(Math.random()*3)){
+							case 0 : u = UtilityType.REPAIR; break;
+							case 1 : u = UtilityType.UPGRADE; break;
+							case 2 : u = UtilityType.SHIELD; break;
+
+							}
 							drops.add(new Utilitys(u,enemy.getX(),enemy.getY()));
 						}
 					}
@@ -422,9 +432,9 @@ public class SpaceShooter extends JPanel implements Runnable {
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		drawBackDrop(g);
+		drawUpgrades(g);
 		drawShips(g);
 		drawBullets(g);
-		drawUpgrades(g);
 		drawString(g);
 
 	}
