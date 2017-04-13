@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 public abstract class SpaceShips {
 	private BufferedImage ship; 
+	public static BufferedImage[] bullets = new BufferedImage[2];
 	private int upgradeStage = 1;
 	private final String imagePath;
 	private int x;
@@ -29,8 +30,25 @@ public abstract class SpaceShips {
 		this.height = height;
 		this.health = health;
 		initialHealth = health;
+		openProjectileImage();
 		loadImage();
 	}
+	public void openProjectileImage(){
+		URL imageUrl = getClass().getResource("/Images/Bullet1.png");
+		try {
+			bullets[0] = ImageIO.read(imageUrl);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	
+		URL imageUrl2 = getClass().getResource("/Images/Bullet2.png");
+		try {
+			bullets[1] = ImageIO.read(imageUrl2);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+}
+	
 	public void loadImage(){
 		URL imageUrl = getClass().getResource(imagePath);
 		try {

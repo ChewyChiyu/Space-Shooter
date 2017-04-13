@@ -14,7 +14,7 @@ public class WheelShip extends SpaceShips{
 
 	@Override
 	public void fire() {
-		bulletsFired.add(new Projectiles(getX()+50, getY()+100, 5,0, (byte) 1,1)); // + 50 for center 100+ for height
+		bulletsFired.add(new Projectiles(getX()+50, getY()+100, 5,0, bullets[1],1)); // + 50 for center 100+ for height
 	}
 
 }

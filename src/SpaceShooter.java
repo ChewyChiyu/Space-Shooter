@@ -39,33 +39,43 @@ public class SpaceShooter extends JPanel implements Runnable {
 		setUpBackGround();
 		start();
 	}
-	public void addEnemysS1(){
+	
+	public void addEnemysS1(){	
 		int xBuffer =WIDTH-100; // 100 pixel buffer
 		int yBuffer = 0;
 		final int SPACER = 5;
 		for(int row = 0; row < 6; row++){
-		enemys.add(new WheelShip(xBuffer,yBuffer));
-		xBuffer-=(100-SPACER);
-		yBuffer-=(100+SPACER);
+			enemys.add(new WheelShip(xBuffer,yBuffer));
+			xBuffer-=(100-SPACER);
+			yBuffer-=(100+SPACER);
 		}
 		xBuffer = 0;
 		for(int row = 0; row < 6; row++){
 			enemys.add(new WheelShip(xBuffer,yBuffer));
 			xBuffer+=(100-SPACER);
 			yBuffer-=(100+SPACER);
-			}
+		}
 		xBuffer = WIDTH-100;
 		for(int row = 0; row < 6; row++){
 			enemys.add(new WheelShip(xBuffer,yBuffer));
 			xBuffer-=(100-SPACER);
 			yBuffer-=(100+SPACER);
-			}
+		}
 		xBuffer = 0;
 		for(int row = 0; row < 6; row++){
 			enemys.add(new WheelShip(xBuffer,yBuffer));
 			xBuffer+=(100-SPACER);
 			yBuffer-=(100+SPACER);
+		}
+		xBuffer = 0;
+		for(int row = 0; row < 6; row++){
+			for(int col = 0; col < 6; col++){
+				enemys.add(new WheelShip(xBuffer,yBuffer));
+				xBuffer+=(100-SPACER);
 			}
+			yBuffer-=(100+SPACER);
+			xBuffer = 0;
+		}
 		xBuffer = -100; // -10 pixel buffer
 		yBuffer -= 500;
 		enemys.add(new StageOneBoss(xBuffer, yBuffer));
@@ -86,7 +96,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setResizable(false);
-		
+
 		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("A"), "A");
 		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("S"), "S");
 		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("D"), "D");
@@ -108,7 +118,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				player.changeXVelocity(-player.getSpeed());
 			}
-			
+
 		});
 		this.getActionMap().put("D", new AbstractAction(){
 
@@ -116,7 +126,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				player.changeXVelocity(player.getSpeed());
 			}
-			
+
 		});
 		this.getActionMap().put("W", new AbstractAction(){
 
@@ -124,7 +134,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				player.changeYVelocity(-player.getSpeed());
 			}
-			
+
 		});
 		this.getActionMap().put("S", new AbstractAction(){
 
@@ -132,7 +142,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				player.changeYVelocity(player.getSpeed());
 			}
-			
+
 		});
 		this.getActionMap().put("rA", new AbstractAction(){
 
@@ -141,7 +151,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 				player.changeXVelocity(0);
 
 			}
-			
+
 		});
 		this.getActionMap().put("rD", new AbstractAction(){
 
@@ -149,7 +159,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				player.changeXVelocity(0);
 			}
-			
+
 		});
 		this.getActionMap().put("rW", new AbstractAction(){
 
@@ -157,7 +167,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				player.changeYVelocity(0);
 			}
-			
+
 		});
 		this.getActionMap().put("rS", new AbstractAction(){
 
@@ -166,18 +176,18 @@ public class SpaceShooter extends JPanel implements Runnable {
 				player.changeYVelocity(0);
 
 			}
-			
+
 		});
-		
-		
-		
+
+
+
 		this.getActionMap().put("SPACE", new AbstractAction(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				player.isFiring = true;
 			}
-			
+
 		});
 		this.getActionMap().put("rSPACE", new AbstractAction(){
 
@@ -186,7 +196,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 				player.isFiring = false;
 
 			}
-			
+
 		});
 		this.getActionMap().put("pause", new AbstractAction(){
 
@@ -199,7 +209,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 					start();
 
 			}
-			
+
 		});
 		fireTimer = new Timer(100, e->{
 			if(player.isFiring){
@@ -218,7 +228,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 			isRunning = false;
 			t.join();
 		}catch(Exception e){
-			
+
 		}
 	}
 	public void run(){
@@ -227,7 +237,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 			try{
 				Thread.sleep(10);
 			}catch(Exception e){
-				
+
 			}
 		}
 	}
@@ -245,6 +255,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 		if(enemys.size()<=0){
 			int reply = JOptionPane.showConfirmDialog(null, "You WON! Score : " + score + "\n Play Again?" , "Win", JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
+				System.gc();
 				player = new Fighter(250,550);
 				enemys.clear();
 				drops.clear();
@@ -262,6 +273,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 		if(fatalWound){
 			int reply = JOptionPane.showConfirmDialog(null, "You Died!" + "\n Play Again?" , "Lose", JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
+				System.gc();
 				player = new Fighter(250,550);
 				enemys.clear();
 				drops.clear();
@@ -277,21 +289,21 @@ public class SpaceShooter extends JPanel implements Runnable {
 	}
 	public void checkForHit(){
 		for(int index = 0; index < drops.size(); index++){
-				int playerX1 = player.getX();
-				int playerX2 = player.getX() + player.getWidth();
-				int playerY1 = player.getY();
-				int playerY2 = player.getY() + player.getHeight();
-				
-				Utilitys u = drops.get(index);
-				if(u.getX()>playerX1&&u.getX()<playerX2&&u.getY()>playerY1&&u.getY()<playerY2){
-					drops.remove(u);
-					if(u.getType().equals(UtilityType.REPAIR)){
-						player.heal();
-					}
-					if(u.getType().equals(UtilityType.UPGRADE)){
-						player.upgrade();
-					}
+			int playerX1 = player.getX();
+			int playerX2 = player.getX() + player.getWidth();
+			int playerY1 = player.getY();
+			int playerY2 = player.getY() + player.getHeight();
+
+			Utilitys u = drops.get(index);
+			if(u.getX()>playerX1&&u.getX()<playerX2&&u.getY()>playerY1&&u.getY()<playerY2){
+				drops.remove(u);
+				if(u.getType().equals(UtilityType.REPAIR)){
+					player.heal();
 				}
+				if(u.getType().equals(UtilityType.UPGRADE)){
+					player.upgrade();
+				}
+			}
 		}
 		for(int index = 0; index < enemys.size(); index++){
 			for(int index2 = 0; index2 < enemys.get(index).getBulletArray().size(); index2++){
@@ -299,7 +311,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 				int playerX2 = player.getX() + player.getWidth();
 				int playerY1 = player.getY();
 				int playerY2 = player.getY() + player.getHeight();
-				
+
 				Projectiles p = enemys.get(index).getBulletArray().get(index2);
 				if(p.getX()>playerX1&&p.getX()<playerX2&&p.getY()>playerY1&&p.getY()<playerY2){
 					enemys.get(index).getBulletArray().remove(p);
@@ -317,7 +329,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 				int enemyX2 = enemy.getX() + enemy.getWidth();
 				int enemyY1 = enemy.getY();
 				int enemyY2 = enemy.getY() + enemy.getHeight();
-				
+
 				if(enemyX1<p.getX()&&enemyX2>p.getX()&&enemyY1<p.getY()&&enemyY2>p.getY()){
 					player.getBulletArray().remove(p);
 					if(enemy.fatalHit(p.getPower())){
@@ -328,7 +340,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 							drops.add(new Utilitys(u,enemy.getX(),enemy.getY()));
 						}
 					}
-					
+
 				}
 			}
 		}
@@ -339,8 +351,8 @@ public class SpaceShooter extends JPanel implements Runnable {
 			if(u.getY()>HEIGHT){
 				drops.remove(u);
 			}
-			
-	}
+
+		}
 		for(int index = 0; index < player.getBulletArray().size(); index++){
 			Projectiles p = player.getBulletArray().get(index);
 			if(p.getX()<0||p.getX()>WIDTH||p.getY()<0||p.getY()>HEIGHT){
@@ -398,14 +410,14 @@ public class SpaceShooter extends JPanel implements Runnable {
 		}
 		player.changeX(player.getXVelocity());
 		player.changeY(player.getYVelocity());
-		
+
 		for(int index = 0; index < enemys.size(); index++){
 			SpaceShips s = enemys.get(index);
 			s.changeX(s.getXVelocity());
 			s.changeY(s.getYVelocity());
 		}
-		
-		
+
+
 	}
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);

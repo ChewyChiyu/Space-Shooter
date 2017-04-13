@@ -20,6 +20,6 @@ public class StageOneBoss extends SpaceShips{
 	public void fire() {
 		int xVelo = (int)(Math.random()*10);
 		xVelo = ((int)(Math.random()*2)==1)?-xVelo:xVelo;
-		bulletsFired.add(new Projectiles(getX()+400, getY()+500, 5,xVelo, (byte) 1,1)); // + 50 for center 100+ for height
+		bulletsFired.add(new Projectiles(getX()+400, getY()+500, 5,xVelo, bullets[1],1)); // + 50 for center 100+ for height
 	}
 }
