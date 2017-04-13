@@ -30,17 +30,20 @@ public class SpaceShooter extends JPanel implements Runnable {
 	final int HEIGHT = 800;
 	final int WIDTH = 600;
 	int score = 0;
+	int stagesComplete = 1;
 	public static void main(String[] args){
 		new SpaceShooter();
 	}
 	public SpaceShooter(){
-		addEnemysS1();
+		runStage(0);
 		setUpPanel();
 		setUpBackGround();
 		start();
 	}
 	
-	public void addEnemysS1(){	
+	public void runStage(int stage){	
+		switch(stage){
+		case 0:
 		int xBuffer =WIDTH-100; // 100 pixel buffer
 		int yBuffer = 0;
 		final int SPACER = 5;
@@ -79,6 +82,11 @@ public class SpaceShooter extends JPanel implements Runnable {
 		xBuffer = -100; // -10 pixel buffer
 		yBuffer -= 500;
 		enemys.add(new StageOneBoss(xBuffer, yBuffer));
+		break;
+		case 1:
+			enemys.add(new StageTwoBoss(-100,-230));
+			break;
+		}	
 	}
 	public void setUpBackGround(){
 		URL imageUrl = getClass().getResource("/Images/spaceback.jpeg");
@@ -253,13 +261,17 @@ public class SpaceShooter extends JPanel implements Runnable {
 	}
 	public void checkForWin(){
 		if(enemys.size()<=0){
+			runStage(stagesComplete++);
+		}
+		if(stagesComplete>=3){
 			int reply = JOptionPane.showConfirmDialog(null, "You WON! Score : " + score + "\n Play Again?" , "Win", JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
 				player = new Fighter(250,550);
 				enemys.clear();
 				drops.clear();
 				score = 0;
-				addEnemysS1();
+				stagesComplete = 1;
+				runStage(0);
 				fatalWound = false;
 				return;
 			}
@@ -276,7 +288,8 @@ public class SpaceShooter extends JPanel implements Runnable {
 				enemys.clear();
 				drops.clear();
 				score = 0;
-				addEnemysS1();
+				stagesComplete = 1;
+				runStage(0);
 				fatalWound = false;
 				return;
 			}
@@ -412,7 +425,7 @@ public class SpaceShooter extends JPanel implements Runnable {
 		if(player.getX()>WIDTH-100){ //100 pixel buffer
 			player.changeX(-player.getSpeed());
 		}
-		if(player.getY()<0){
+		if(player.getY()<180){ //180 pixel buffer
 			player.changeY(player.getSpeed());
 		}
 		if(player.getY()>HEIGHT){
