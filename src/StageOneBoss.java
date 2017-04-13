@@ -3,7 +3,7 @@ import javax.swing.Timer;
 public class StageOneBoss extends SpaceShips{
 	Timer onBoard;
 	public StageOneBoss(int x, int y) {
-		super("/Images/Stage1Boss.png", x, y, 800, 500, 1000);
+		super("/Images/Stage1Boss.png", x, y, 800, 500, 2000);
 		onBoard = new Timer(100, e->{
 			if(getY()<-320){
 				changeYVelocity(1);
