@@ -42,7 +42,7 @@ public abstract class SpaceShips {
 	public void draw(Graphics g, int x, int y){
 		g.drawImage(ship, x, y, width,height, null);
 		g.setColor(Color.green);
-		g.fillRect(x, y+height, health*10, 5);		
+		g.fillRect(x, y+height, health*10, 5);	//Health buffer added	
 	}
 	public int getX(){
 		return x;
